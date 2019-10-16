@@ -1,5 +1,5 @@
 ## About
-a alfred workflow aim to  download papers from SciHub
+a alfred workflow for downloading papers from SciHub
 ## Usage
 keywords: papd + {DOI or URL}
 
