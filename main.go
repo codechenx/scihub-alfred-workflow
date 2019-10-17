@@ -57,7 +57,11 @@ func getLink(url string) string {
 		os.Exit(1)
 	}
 	doc := soup.HTMLParse(resp)
-	link := doc.Find("div", "id", "article").Find("iframe")
+	linkRoot := doc.Find("div", "id", "article")
+	if linkRoot.Error != nil {
+		return ""
+	}
+	link := linkRoot.Find("iframe")
 	if len(link.Attrs()) != 0 {
 		mirror := strings.Split(link.Attrs()["src"], "#")[0]
 		if strings.HasPrefix(mirror, "//") {
@@ -116,6 +120,13 @@ func run() {
 	SciHubURL := validateURL(getURLs("https://whereisscihub.now.sh/api"))
 	paperURL := SciHubURL + "/" + query
 	link := getLink(paperURL)
+	if link == "" {
+		err := exec.Command("open", paperURL).Start()
+		if err != nil {
+			panic(fmt.Sprintf("Failed to open url in browser"))
+		}
+		return
+	}
 	downloadFile(link)
 	wf.NewItem("Download Successfully")
 	wf.SendFeedback()
