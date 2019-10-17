@@ -60,6 +60,9 @@ func getLink(url string) string {
 	link := doc.Find("div", "id", "article").Find("iframe")
 	if len(link.Attrs()) != 0 {
 		mirror := strings.Split(link.Attrs()["src"], "#")[0]
+		if strings.HasPrefix(mirror, "//") {
+			mirror = "http:" + mirror
+		}
 		return mirror
 	}
 	return ""
