@@ -11,7 +11,7 @@ Because there are several seconds for alfred to download pdf file, so it's ok to
 
 ## Installation
 
-1. download [release](https://github.com/codechenx/scihub-alfred-workflow/releases/download/0.1.1/scihub_downlader_v0.1.1.alfredworkflow)
+1. download [release](https://github.com/codechenx/scihub-alfred-workflow/releases/download/0.1.1/scihub_downloader_v0.1.1.alfredworkflow)
 
 2. After installation,  if macos warn you that "cannot be opened because the developer cannot be verified", you need to open system preferences -> security & privach -> click "allow anyway" like below:
 ![Screenshot](screenshots/00B5C8B0-3F52-4CAE-BD97-EEB2655676A7.jpg)
