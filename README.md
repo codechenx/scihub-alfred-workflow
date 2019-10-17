@@ -5,7 +5,7 @@ keywords: papd + {DOI or URL}
 
 The pdf  file of the paper will be downloaded into your Downloads directory. if CAPTCHA is needed, it will open  URL of the pdf file in your default browser.
 
-Because there are several seconds for alfred to download pdf file, so it's ok to close alfred window after you have run this workflow, your will find this pdf file in your Downloads directory after completion . Beside, you can also wait the final of download without colse alfred window, alfred will show you a message "download successful" after completion.
+Because there are several seconds for alfred to download pdf file, so it's ok to close alfred window after you have run this workflow, your will find this pdf file in your Downloads directory after it completed . Beside, you can also wait the final of download without colse alfred window, alfred will show you a message "download successful" after it completed.
 
 ![Screenshot](screenshots/0AC81DE0-C7E5-447C-8C7B-E84B7E740195.png)
 
