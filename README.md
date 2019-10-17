@@ -1,7 +1,7 @@
 ## About
 a alfred workflow for downloading papers from SciHub
 ## Usage
-keywords: papd + {DOI or URL}
+keywords: papd {DOI or URL}
 
 The pdf  file of the paper will be downloaded into your Downloads directory. if CAPTCHA is needed, it will open  URL of the pdf file in your default browser.
 
