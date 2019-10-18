@@ -14,7 +14,7 @@ import (
 	"github.com/anaskhan96/soup"
 )
 
-func getURLs(url string) []string {
+func getSciHubURLs(url string) []string {
 	resp, err := http.Get(url)
 	if err != nil {
 		log.Fatal(err)
@@ -33,7 +33,7 @@ func getURLs(url string) []string {
 	return urls
 }
 
-func validateURL(urls []string) string {
+func validateSciHubURL(urls []string) string {
 	for _, url := range urls {
 		resp, err := http.Get(url)
 		if err != nil {
@@ -48,8 +48,7 @@ func validateURL(urls []string) string {
 
 	return ""
 }
-
-func getLink(url string) string {
+func getSciHubLink(url string) string {
 	resp, err := soup.Get(url)
 	if err != nil {
 		os.Exit(1)
@@ -79,7 +78,7 @@ func fileExists(filepath string) bool {
 	return true
 }
 
-func downloadFile(url string) string {
+func downloadFile(url string, filepath string) string {
 	resp, err := http.Get(url)
 	if err != nil {
 		os.Exit(1)
@@ -88,9 +87,6 @@ func downloadFile(url string) string {
 	defer resp.Body.Close()
 
 	if resp.Header.Get("content-type") == "application/pdf" {
-		temp := strings.Split(url, "/")
-		PdfName := temp[len(temp)-1]
-		filepath := os.Getenv("HOME") + "/Downloads/" + PdfName
 		if fileExists(filepath) {
 			return "file exists"
 		}
@@ -116,9 +112,9 @@ func downloadFile(url string) string {
 
 func main() {
 	query := os.Args[1]
-	SciHubURL := validateURL(getURLs("https://whereisscihub.now.sh/api"))
+	SciHubURL := validateSciHubURL(getSciHubURLs("https://whereisscihub.now.sh/api"))
 	paperURL := SciHubURL + "/" + query
-	link := getLink(paperURL)
+	link := getSciHubLink(paperURL)
 	if link == "" {
 		err := exec.Command("open", paperURL).Start()
 		if err != nil {
@@ -127,7 +123,11 @@ func main() {
 		fmt.Println("Failed to download, try to open URL in your browser")
 		return
 	}
-	message := downloadFile(link)
+
+	linkSplit := strings.Split(link, "/")
+	PdfName := linkSplit[len(linkSplit)-1]
+	filepath := os.Getenv("HOME") + "/Downloads/" + PdfName
+	message := downloadFile(link, filepath)
 	if message == "success" {
 		fmt.Println("Download finished")
 	} else if message == "file exists" {
