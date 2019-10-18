@@ -2,7 +2,6 @@ package main
 
 import (
 	"encoding/json"
-	"flag"
 	"fmt"
 	"io"
 	"io/ioutil"
@@ -13,7 +12,6 @@ import (
 	"strings"
 
 	"github.com/anaskhan96/soup"
-	aw "github.com/deanishe/awgo"
 )
 
 func getURLs(url string) []string {
@@ -72,16 +70,30 @@ func getLink(url string) string {
 	return ""
 }
 
-func downloadFile(url string) {
+func fileExists(filepath string) bool {
+	if _, err := os.Stat(filepath); err != nil {
+		if os.IsNotExist(err) {
+			return false
+		}
+	}
+	return true
+}
+
+func downloadFile(url string) string {
 	resp, err := http.Get(url)
 	if err != nil {
 		os.Exit(1)
 	}
+
 	defer resp.Body.Close()
+
 	if resp.Header.Get("content-type") == "application/pdf" {
 		temp := strings.Split(url, "/")
 		PdfName := temp[len(temp)-1]
 		filepath := os.Getenv("HOME") + "/Downloads/" + PdfName
+		if fileExists(filepath) {
+			return "file exists"
+		}
 		out, err := os.Create(filepath)
 		if err != nil {
 			panic(fmt.Sprintf("Failed to create file"))
@@ -92,31 +104,18 @@ func downloadFile(url string) {
 		if err != nil {
 			panic(fmt.Sprintf("Failed to write file"))
 		}
-	} else {
-		err := exec.Command("open", url).Start()
-		if err != nil {
-			panic(fmt.Sprintf("Failed to open url in browser"))
-		}
+		return "success"
 	}
+
+	err = exec.Command("open", url).Start()
+	if err != nil {
+		panic(fmt.Sprintf("Failed to download file and open url in browser"))
+	}
+	return "fail"
 }
 
-var wf *aw.Workflow
-
-func init() {
-	wf = aw.New()
-}
-
-func run() {
-	wf.Args() // call to handle any magic actions
-	flag.Parse()
-	query := ""
-	if args := flag.Args(); len(args) > 0 {
-		query = args[0]
-	}
-	if query == "" {
-		panic(fmt.Sprintf("query is empty"))
-	}
-	log.Printf("[main] query=%s", query)
+func main() {
+	query := os.Args[1]
 	SciHubURL := validateURL(getURLs("https://whereisscihub.now.sh/api"))
 	paperURL := SciHubURL + "/" + query
 	link := getLink(paperURL)
@@ -125,13 +124,15 @@ func run() {
 		if err != nil {
 			panic(fmt.Sprintf("Failed to open url in browser"))
 		}
+		fmt.Println("Failed to download, try to open URL in your browser")
 		return
 	}
-	downloadFile(link)
-	wf.NewItem("Download Successfully")
-	wf.SendFeedback()
-}
-
-func main() {
-	wf.Run(run)
+	message := downloadFile(link)
+	if message == "success" {
+		fmt.Println("Download finished")
+	} else if message == "file exists" {
+		fmt.Println("Failed to download, File already exists in Download directory")
+	} else {
+		fmt.Println("Failed to download, try to open URL in your browser")
+	}
 }
