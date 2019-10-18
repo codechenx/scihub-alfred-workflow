@@ -5,7 +5,7 @@ keywords: papd {DOI or URL}
 
 The pdf  file of the paper will be downloaded into your Downloads directory. if CAPTCHA is needed, it will open  URL of the pdf file in your default browser.
 
-Because there are several seconds for alfred to download the pdf file of the paper, when you run this workflow, it will download the pdf file in background util it complete. And then your will receive a notification and can find this pdf file in your Downloads directory after.
+Because there are several seconds for alfred to download the pdf file of the paper, when you run this workflow, it will download the pdf file in background util it finished. And then your will receive a notification and can find this pdf file in your Downloads directory after.
 
 ![Screenshot](screenshots/0AC81DE0-C7E5-447C-8C7B-E84B7E740195.png)
 
